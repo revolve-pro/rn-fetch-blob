@@ -43,6 +43,30 @@ public class RNFetchBlobUtils {
 
     }
 
+        public static String getSHA256(String input) {
+        String result = null;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA256");
+            md.update(input.getBytes());
+            byte[] digest = md.digest();
+
+            StringBuilder sb = new StringBuilder();
+
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+
+            result = sb.toString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            // TODO: Is discarding errors the intent? (https://www.owasp.org/index.php/Return_Inside_Finally_Block)
+            return result;
+        }
+
+    }
+
     public static void emitWarningEvent(String data) {
         WritableMap args = Arguments.createMap();
         args.putString("event", "warn");
